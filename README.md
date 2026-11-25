@@ -6,7 +6,7 @@ Built in 4 days — one small, clean step every day. Code is kept easy and minim
 ## Features
 
 - [x] Home UI with total spent card and expense list (Day 1)
-- [ ] Add-expense form (Day 2)
+- [x] Add-expense form (Day 2)
 - [ ] Local storage + categories and filter (Day 3)
 - [ ] Edit / delete + monthly summary + final polish (Day 4)
 
