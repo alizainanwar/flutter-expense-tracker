@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
+import '../controllers/expense_controller.dart';
 import '../models/expense.dart';
+import '../screens/add_expense_screen.dart';
 
-/// A single row in the expense list.
+/// A single row in the expense list, with edit and delete actions.
 class ExpenseTile extends StatelessWidget {
   const ExpenseTile({super.key, required this.expense});
 
@@ -28,6 +31,20 @@ class ExpenseTile extends StatelessWidget {
     }
   }
 
+  void _confirmDelete() {
+    Get.defaultDialog(
+      title: 'Delete expense?',
+      middleText: '"${expense.title}" will be removed.',
+      textConfirm: 'Delete',
+      textCancel: 'Cancel',
+      confirmTextColor: Colors.white,
+      onConfirm: () {
+        Get.find<ExpenseController>().deleteExpense(expense.id);
+        Get.back();
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -40,12 +57,30 @@ class ExpenseTile extends StatelessWidget {
         subtitle: Text(
           '${expense.category} • ${DateFormat.yMMMd().format(expense.date)}',
         ),
-        trailing: Text(
-          'Rs ${expense.amount.toStringAsFixed(0)}',
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
-          ),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Rs ${expense.amount.toStringAsFixed(0)}',
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
+            ),
+            PopupMenuButton<String>(
+              onSelected: (value) {
+                if (value == 'edit') {
+                  Get.to(() => AddExpenseScreen(expense: expense));
+                } else if (value == 'delete') {
+                  _confirmDelete();
+                }
+              },
+              itemBuilder: (context) => const [
+                PopupMenuItem(value: 'edit', child: Text('Edit')),
+                PopupMenuItem(value: 'delete', child: Text('Delete')),
+              ],
+            ),
+          ],
         ),
       ),
     );

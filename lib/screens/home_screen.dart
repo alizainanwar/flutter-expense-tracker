@@ -4,11 +4,13 @@ import 'package:get/get.dart';
 import '../controllers/expense_controller.dart';
 import '../models/expense.dart';
 import '../widgets/expense_tile.dart';
+import '../widgets/monthly_summary_card.dart';
 import '../widgets/total_spent_card.dart';
 import 'add_expense_screen.dart';
 
-/// Home screen: total spent card, category filter, expense list.
-/// Day 3: reads expenses from ExpenseController (GetX); FAB opens the add form.
+/// Home screen: monthly total card, monthly summary, category filter,
+/// expense list. Reads expenses from ExpenseController (GetX);
+/// FAB opens the add form.
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
@@ -29,9 +31,11 @@ class HomeScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               TotalSpentCard(
-                totalSpent: controller.totalSpent,
-                count: controller.expenses.length,
+                totalSpent: controller.monthlyTotal,
+                count: controller.monthlyCount,
               ),
+              MonthlySummaryCard(totals: controller.monthlyByCategory),
+              const SizedBox(height: 16),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Row(

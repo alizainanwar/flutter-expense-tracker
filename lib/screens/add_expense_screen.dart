@@ -8,16 +8,22 @@ import '../widgets/custom_button.dart';
 import '../widgets/custom_text_field.dart';
 
 /// Add-expense form: title, amount, category picker, date picker.
+/// The same form edits an expense when one is passed in.
 /// StatelessWidget — all form state lives in AddExpenseController.
 class AddExpenseScreen extends StatelessWidget {
-  const AddExpenseScreen({super.key});
+  const AddExpenseScreen({super.key, this.expense});
+
+  final Expense? expense;
 
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(AddExpenseController());
+    controller.prepare(expense);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Add Expense')),
+      appBar: AppBar(
+        title: Text(controller.isEditing ? 'Edit Expense' : 'Add Expense'),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Form(
@@ -80,7 +86,11 @@ class AddExpenseScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 24),
-              CustomButton(label: 'Save Expense', onPressed: controller.save),
+              CustomButton(
+                label:
+                    controller.isEditing ? 'Save Changes' : 'Save Expense',
+                onPressed: controller.save,
+              ),
             ],
           ),
         ),

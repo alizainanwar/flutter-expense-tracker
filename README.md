@@ -8,7 +8,7 @@ Built in 4 days — one small, clean step every day. Code is kept easy and minim
 - [x] Home UI with total spent card and expense list (Day 1)
 - [x] Add-expense form (Day 2)
 - [x] Local storage + categories filter (Day 3)
-- [ ] Edit / delete + monthly summary + final polish (Day 4)
+- [x] Edit / delete + monthly summary + final polish (Day 4)
 
 ## 4-Day Plan
 
@@ -25,8 +25,10 @@ Built in 4 days — one small, clean step every day. Code is kept easy and minim
 - State with **GetX**: `GetXController` + `Rx` values, `Obx` for UI updates,
   dependency injection with `Get.put` / `Get.find`.
 - Reusable widgets live in `lib/widgets/` (`CustomTextField`, `CustomButton`,
-  `TotalSpentCard`, `ExpenseTile`) and are used everywhere instead of
-  duplicated UI code.
+  `TotalSpentCard`, `ExpenseTile`, `MonthlySummaryCard`) and are used
+  everywhere instead of duplicated UI code.
+- Editing reuses the same add-expense form (`AddExpenseScreen` +
+  `AddExpenseController`) — no second form.
 - Local storage with **GetStorage**: expenses are saved as JSON and loaded
   on startup, so they survive an app restart.
 

@@ -22,7 +22,32 @@ class ExpenseController extends GetxController {
         .toList();
   }
 
-  double get totalSpent => expenses.fold(0, (sum, e) => sum + e.amount);
+  /// Expenses from the current month only.
+  List<Expense> get _thisMonthExpenses {
+    final now = DateTime.now();
+    return expenses
+        .where((e) => e.date.year == now.year && e.date.month == now.month)
+        .toList();
+  }
+
+  /// Total spent in the current month.
+  double get monthlyTotal =>
+      _thisMonthExpenses.fold(0, (sum, e) => sum + e.amount);
+
+  /// Number of expenses in the current month.
+  int get monthlyCount => _thisMonthExpenses.length;
+
+  /// Current-month totals per category, biggest first.
+  Map<String, double> get monthlyByCategory {
+    final totals = <String, double>{};
+    for (final expense in _thisMonthExpenses) {
+      totals[expense.category] =
+          (totals[expense.category] ?? 0) + expense.amount;
+    }
+    final sorted = totals.entries.toList()
+      ..sort((a, b) => b.value.compareTo(a.value));
+    return Map.fromEntries(sorted);
+  }
 
   @override
   void onInit() {
@@ -39,6 +64,18 @@ class ExpenseController extends GetxController {
 
   void addExpense(Expense expense) {
     expenses.insert(0, expense);
+    _save();
+  }
+
+  void updateExpense(Expense updated) {
+    final index = expenses.indexWhere((e) => e.id == updated.id);
+    if (index == -1) return;
+    expenses[index] = updated;
+    _save();
+  }
+
+  void deleteExpense(String id) {
+    expenses.removeWhere((e) => e.id == id);
     _save();
   }
 
